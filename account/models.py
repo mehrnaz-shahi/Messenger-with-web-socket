@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
+from django.apps import apps
 
 # from main import models as main
 
@@ -58,3 +59,18 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return '{} {}'.format(self.first_name, self.last_name)
+    
+    def is_member(self, group):
+        group_member = apps.get_model(app_label='main', model_name='GroupMember').objects.filter(user=self, group=group, is_member=True)
+        if group_member:
+            return True
+        return False
+    
+    def can_send_message(user, group):
+        group_member = apps.get_model(app_label='main', model_name='GroupMember').objects.filter(user=user, group=group, is_member=True)
+        if group_member:
+            group_member = group_member[0]
+            if group_member.group.type == '1' or group_member.is_admin:
+                return True
+        return False
+

@@ -119,6 +119,7 @@
       </div>
     </nav>
    
+   {% block content %}
     <div class="chitchat-main small-sidebar" id="content" style="width: 100%;">
       <div class="chat-content tabto active">
         <div class="messages custom-scroll active" id="chating">
@@ -235,6 +236,7 @@
         </div>
       </div>
     </div>
+    {% endblock %}
    
   </div>
   
@@ -261,6 +263,7 @@
   <script src="{% static 'assets/js/zoom-gallery.js' %}"></script>
   <script src="{% static 'assets/js/script.js' %}"></script>
    
+   {% block script %}
    <script>
 
         const chatSocket = new WebSocket(
@@ -349,6 +352,7 @@
             }));
         }
     </script>
+  {% endblock %}
 </body>
 
 </html>

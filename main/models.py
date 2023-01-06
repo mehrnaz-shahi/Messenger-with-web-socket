@@ -22,7 +22,7 @@ class GroupMember(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     is_admin = models.BooleanField(default=False)
     is_member = models.BooleanField(default=True)
-    can_send_message = models.BooleanField(default=True)
+    # can_send_message = models.BooleanField(default=True)
     leave_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):

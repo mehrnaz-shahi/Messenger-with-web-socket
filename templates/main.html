@@ -198,6 +198,26 @@
                           
                         </li>
                         {% endfor %}
+
+                        {% for g in groups %}
+                        <li data-to="blank">
+                        
+                          <div class="chat-box">
+                          <a href="{% url 'group:group' group_id=g.id %}">
+                            <div class="profile online"><img class="bg-img" src="assets/images/contact/2.jpg"
+                                alt="Avatar" /></div>
+                            <div class="details">
+                              <h5>{{g.name}}</h5>
+                              <h6>{{g.desc}}</h6>
+                            </div>
+                            </a>
+                            <div class="date-status"><i class="ti-pin2"></i>
+                              
+                            </div>
+                          </div>
+                          
+                        </li>
+                        {% endfor %}
                         
                       </ul>
                     </div>

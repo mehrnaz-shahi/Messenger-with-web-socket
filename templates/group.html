@@ -1,0 +1,326 @@
+{% extends 'pv.html' %}
+{% load static %}
+{% load jalali_tags %}
+
+
+{% block content %}
+<div class="chitchat-main small-sidebar" id="content" style="width: 100%;">
+      <div class="chat-content tabto active">
+        <div class="messages custom-scroll active" id="chating">
+          <div class="contact-details">
+            <div class="row">
+              <form class="form-inline search-form">
+                <div class="form-group">
+                  <input class="form-control-plaintext" type="search" placeholder="جستجو.." />
+                  <div class="icon-close close-search"> </div>
+                </div>
+              </form>
+              <div class="col-7">
+                <div class="media left">
+                  <div class="media-left mr-3">
+                    <div class="profile online menu-trigger"><img class="bg-img" src="assets/images/contact/2.jpg"
+                        alt="Avatar" /></div>
+                  </div>
+                  <div class="media-body">
+                    <h5>{{group.name}}</h5>
+                    {% comment %} <div class="badge badge-success">آنلاین</div> {% endcomment %}
+                  </div>
+                  <div class="media-right">
+                    <ul>
+                      <li>{{group.get_type_display}}
+                      </li>
+                    {% if is_member %}
+                       <li>شما عضو این {{group.get_type_display}} هستید
+                      </li>
+                      {% endif %}
+
+                    {% if user == group.owner %}
+                       <li>
+                       <a href="#" data-toggle="modal" data-target="#memberList">نمایش اعضا</a>
+                       </li>
+                      {% endif %}
+                      
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <ul class="calls text-right">
+                  <li><a class="icon-btn btn-light button-effect" href="#" data-tippy-content="تماس صوتی سریع"
+                      data-toggle="modal" data-target="#audiocall"><i data-feather="phone"></i></a></li>
+                  <li><a class="icon-btn btn-light button-effect" href="#" data-tippy-content="تماس تصویری سریع"
+                      data-toggle="modal" data-target="#videocall"><i data-feather="video"></i></a></li>
+                  <li><a class="icon-btn btn-light button-effect apps-toggle" href="#"
+                      data-tippy-content="تمام برنامه ها"><i class="ti-layout-grid2"></i></a></li>
+                  <li class="chat-friend-toggle"><a class="icon-btn btn-light bg-transparent button-effect outside"
+                      href="#" data-tippy-content="عملیات سریع"><i data-feather="more-vertical"></i></a>
+                    <div class="chat-frind-content">
+                      <ul>
+                        <li><a class="icon-btn btn-outline-primary button-effect btn-sm" href="#"><i
+                              data-feather="user"></i></a>
+                          <h5>پروفایل</h5>
+                        </li>
+                        <li><a class="icon-btn btn-outline-success button-effect btn-sm" href="#"><i
+                              data-feather="plus-circle"></i></a>
+                          <h5>بایگانی</h5>
+                        </li>
+                        <li><a class="icon-btn btn-outline-danger button-effect btn-sm" href="#"><i
+                              data-feather="trash-2"></i></a>
+                          <h5>حذف</h5>
+                        </li>
+                        <li><a class="icon-btn btn-outline-light button-effect btn-sm" href="#"><i
+                              data-feather="slash"></i></a>
+                          <h5>مسدود</h5>
+                        </li>
+                      </ul>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="contact-chat">
+            <ul class="chatappend">
+            {% for i in gpmessages %}
+              <li class="{% if i.group_member.user == user %}sent{% else %}replies{% endif %}" id="{{i.id}}">
+                <div class="media">
+                  <div class="media-body">
+                    <div class="contact-name">
+                      <h5>{{i.group_member.user.first_name}}</h5>
+                      <h6>{{i.created|to_jalali:'%H:%M'}}</h6>
+                      <ul class="msg-box">
+                        <li class="msg-setting-main">
+                        {% if i.group_member.user == user %}
+                          <div class="msg-dropdown-main">
+                            <div class="msg-setting"><i class="ti-more-alt"></i></div>
+                            <div class="msg-dropdown">
+                              <ul>
+                                <li><a href="javascript:delete_message({{i.id}})"><i class="fa fa-star-o"></i>حذف برای همه</a></li>
+                     
+                              </ul>
+                            </div>
+                          </div>
+                          {% endif %}
+                          <h5>{{i.text}}</h5>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              {% endfor %}
+             
+            </ul>
+          </div>
+        </div>
+       
+        <div class="message-input">
+          <div class="wrap emojis-main">
+            {% if is_member %}
+            {% if can_send_message %}
+            <input class="setemoj" id="message-input" type="text" placeholder="پیام خود را اینجا بنویسید..." />
+            <button class="submit icon-btn btn-primary" id="message-btn"><i
+                data-feather="send">
+              </i></button>
+            {% endif %}
+
+            {% if user != group.owner %}
+                <a id="leave" class="btn-outline-danger btn-sm" href="#">خروج</a>
+            {% endif %}
+            {% else %}
+                <a id="add" class="btn-outline-success btn-sm" href="#">عضویت</a>
+            {% endif %}
+           
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+<div class="modal fade add-popup msg-chat-modal" id="memberList" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">
+            ارسال پیام جدید</h2>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <div class="chat-msg-search">
+            <div>
+             {% for group_member in group_members %} 
+             {% if group_member.user != user %}
+             <div>
+                <span>{{group_member.user.get_full_name}}</span>
+                {% if group_member.is_admin %}
+                <a class="nav-link button-effect" onclick="javascript:admin('{{group_member.user.username}}')">ادمین قرار ندادن</a>
+                {% else %}
+                <a class="nav-link button-effect" onclick="javascript:admin('{{group_member.user.username}}')">ادمین قرار دادن</a>
+                {% endif %}
+            </div>
+            {% endif %}
+              {% endfor %}
+
+            </div>
+          </div>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+    
+
+{% block script %}
+   <script>
+
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/group/'
+            + {{group.id}}
+            + '/'
+        );
+
+        // onmessage - An event listener to be called when a message is received from the server.
+        chatSocket.onmessage = function(e) {
+            // JSON.parse() converts the JSON object back into the original object,
+            // then examine and act upon its contents.
+            const data = JSON.parse(e.data);
+
+            if (data.type == "MESSAGE"){
+                  sender = "replies";
+
+                  if (data.user_id == {{user.id}}){
+                    sender = "send";
+                  }
+                  if ($.trim(data.message) == "") {
+                      return false;
+                    }
+
+                    if (sender == "send"){
+                    $(
+                    `<li class="${sender}" id="${data.message_id}">
+                    <div class="media">
+                        <div class="profile mr-4" style="background-image: url('assets/images/contact/1.jpg'); 
+                        background-size: cover; background-position: center center;">
+                        </div>
+                        <div class="media-body">
+                            <div class="contact-name">
+                                <h5>${data.user_first_name}</h5>
+                                <h6>${data.time}</h6>
+                                <ul class="msg-box">
+                                    <li class="msg-setting-main">
+                                      <div class="msg-dropdown-main">
+                                        <div class="msg-setting"><i class="ti-more-alt"></i></div>
+                                        <div class="msg-dropdown">
+                                          <ul>
+                                            <li><a href="javascript:delete_message(${data.message_id})"><i class="fa fa-star-o"></i>حذف برای همه</a></li>
+                                          </ul>
+                                        </div>
+                                      </div>
+                                      <h5>${data.message}</h5>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </li>`
+                    ).appendTo($(".messages .chatappend"));
+                    }
+                    else{
+                        $(
+                    `<li class="${sender}" id="${data.message_id}">
+                    <div class="media">
+                        <div class="profile mr-4" style="background-image: url('assets/images/contact/1.jpg'); 
+                        background-size: cover; background-position: center center;">
+                        </div>
+                        <div class="media-body">
+                            <div class="contact-name">
+                                <h5>${data.user_first_name}</h5>
+                                <h6>${data.time}</h6>
+                                <ul class="msg-box">
+                                    <li class="msg-setting-main">
+                                      <h5>${data.message}</h5>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </li>`
+                    ).appendTo($(".messages .chatappend"));
+                    }
+            }
+            else if (data.type == "REQUEST"){
+            console.log(11111111)
+              location.reload();
+            }
+            else if (data.type == "DELETE"){
+              $("#" + data.message_id).remove();
+            }
+        }
+
+        // onclose - An event listener to be called when the connection is closed.
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+
+        {% if is_member %}
+            {% if can_send_message %}
+        document.querySelector('#message-btn').onclick = function(e) {
+            const messageInputDom = document.querySelector('#message-input');
+            const message = messageInputDom.value;
+            console.log(message);
+
+            // Send the msg object as a JSON-formatted string.
+            chatSocket.send(JSON.stringify({
+                'type': 'MESSAGE',
+                'message': message
+            }));
+
+            // Blank the text input element, ready to receive the next line of text from the user.
+            messageInputDom.value = '';
+        };
+            {% endif %}
+
+        {% if user != group.owner %}
+        document.querySelector('#leave').onclick = function(e) {   
+            
+            chatSocket.send(JSON.stringify({
+                'type': 'REQUEST',
+                'action': 'leave'
+            }));      
+        };
+        {% endif %}
+
+        {% else %}
+         document.querySelector('#add').onclick = function(e) {   
+            
+            chatSocket.send(JSON.stringify({
+                'type': 'REQUEST',
+                'action': 'add'
+            }));      
+        };
+        {% endif %}
+
+
+        function delete_message(message_id){
+          chatSocket.send(JSON.stringify({
+                'type': 'DELETE',
+                'message_id': message_id
+            }));
+        }
+
+        function admin(username){
+            chatSocket.send(JSON.stringify({
+                'type': 'ADMIN',
+                'username': username
+            }));
+        }
+
+
+    </script>
+  {% endblock %}

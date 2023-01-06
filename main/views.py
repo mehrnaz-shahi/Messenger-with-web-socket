@@ -5,10 +5,19 @@ from account import models as account
 
 
 def index_view(request):
+    if not request.user.is_authenticated:
+        return redirect('account:account')
+
     pvs = models.PV.objects.filter(user1=request.user) | models.PV.objects.filter(user2=request.user)
 
+    group_members = models.GroupMember.objects.filter(user=request.user, is_member=True)
+    groups = []
+
+    for gm in group_members:
+        groups.append(gm.group)
     context = {
-        'pvs': pvs
+        'pvs': pvs,
+        'groups': groups
     }
     return render(request, 'main.html', context)
 
@@ -42,7 +51,7 @@ def start_group_view(request):
     group = models.Group(owner=request.user, name=name, desc=desc, type=t)
     group.save()
 
-    member = models.GroupMember(user=request.user, is_admin=True, is_member=True, can_send_message=True, group=group)
+    member = models.GroupMember(user=request.user, is_admin=True, is_member=True, group=group)
     member.save()
 
     # return redirect('chat:pv', pv_id=pv.id)

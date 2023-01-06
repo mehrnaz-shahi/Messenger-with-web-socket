@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+{% load static %}
+{% load jalali_tags %}
+<html lang="fa">
+
+<head>
+  <title>چیت چت - قالب html پیام رسان - پیام رسانی</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Chitchat">
+  <meta name="keywords" content="Chitchat">
+  <meta name="author" content="Chitchat">
+  <link rel="icon" href="assets/images/favicon/favicon.png" type="image/x-icon">
+  <link rel="shortcut icon" href="assets/images/favicon/favicon.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700,800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Rubik:300,300i,400,400i,500,500i,700,700i,900,900i&display=swap"
+    rel="stylesheet"> 
+  <link rel="stylesheet" type="text/css" href="{% static 'assets/css/date-picker.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'assets/css/magnific-popup.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}" media="screen" id="color">
+  <link rel="stylesheet" type="text/css" href="{% static 'assets/css/tour.css' %}">
+    <!-- Farsi fonts stylesheet ; for more information ; https://rastikerdar.github.io/vazirmatn/ -->
+  <link rel="stylesheet" href="{% static 'assets/fonts/vazir/Farsi-Digits/Vazirmatn-FD-font-face.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
+  <!-- Persian date-time picker -->
+  <link rel="stylesheet" href="{% static 'assets/css/jquery.md.bootstrap.datetimepicker.style.css' %}">
+  <style>
+    .replies .media .media-body .contact-name,
+    .replies .media .media-body .contact-name h5,
+    .replies .media .media-body .contact-name h6 {
+      direction: ltr;
+      text-align: left;
+    }
+
+    .msg-setting-main .msg-dropdown-main .msg-dropdown {
+      right: unset;
+      left: 0;
+      text-align: right;
+    }
+
+    .sent .media .media-body .msg-box .msg-setting-main .msg-dropdown-main .msg-dropdown ul li a {
+      color: #595959;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-content: space-between;
+      justify-content: space-between;
+    }
+
+    .sent .media .media-body .msg-box .msg-setting-main .msg-dropdown-main .msg-dropdown ul li a i {
+      font-size: 16px;
+      display: inline;
+      margin-left: 15px;
+      margin-right: unset;
+    }
+
+    .replies .media .media-body .msg-box .msg-setting-main .msg-dropdown-main .msg-dropdown ul li a {
+      color: #595959;
+      width: 100%;
+      display: flex;
+      flex-direction: row-reverse;
+      align-content: space-between;
+      justify-content: space-between;
+    }
+
+    .replies .media .media-body .msg-box .msg-setting-main .msg-dropdown-main .msg-dropdown ul li a i {
+      font-size: 16px;
+      display: inline;
+      margin-left: 15px;
+      margin-right: unset;
+    }
+
+    .app-list-ul .title {
+      border-bottom: 1px solid #eff1f2;
+      padding-bottom: 15px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app-list-ul li {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+
+<body class="rtl sidebar-active">
+  <div class="chitchat-loader">
+    <div><img src="assets/images/logo/logo_big.png" alt="" />
+      <h3>اپلیکیشنی سریع و ایمن برای پیام رسانی ..!</h3>
+    </div>
+  </div>
+  <div class="chitchat-container sidebar-toggle">
+    <nav class="main-nav on custom-scroll">
+      <div class="logo-warpper"><a href="messenger.html"><img src="assets/images/logo/logo.png" alt="logo" /></a></div>
+      <div class="sidebar-main">
+        <ul class="sidebar-top">
+          <li><a class="icon-btn btn-light button-effect" href="/" data-tippy-content="خانه"><i
+                class="fa fa-home"> </i></a></li>
+          <li><a class="icon-btn btn-light button-effect" href="settings" data-tippy-content="تنظیمات"
+              > <i class="fa fa-cog"></i></a></li>
+        </ul>
+        <ul class="sidebar-bottom">
+          <li><a class="icon-btn btn-light button-effect mode" href="#" data-tippy-content="حالت شب"
+              data-intro="تغییر حالت"><i class="fa fa-moon-o"></i></a></li>
+          <li><a class="icon-btn btn-light" href="login.html" data-tippy-content=" خروج"> <i class="fa fa-power-off">
+              </i></a></li>
+        </ul>
+      </div>
+    </nav>
+   
+    <div class="chitchat-main small-sidebar" id="content" style="width: 100%;">
+      <div class="chat-content tabto active">
+        <div class="messages custom-scroll active" id="chating">
+          <div class="contact-details">
+            <div class="row">
+              <form class="form-inline search-form">
+                <div class="form-group">
+                  <input class="form-control-plaintext" type="search" placeholder="جستجو.." />
+                  <div class="icon-close close-search"> </div>
+                </div>
+              </form>
+              <div class="col-7">
+                <div class="media left">
+                  <div class="media-left mr-3">
+                    <div class="profile online menu-trigger"><img class="bg-img" src="assets/images/contact/2.jpg"
+                        alt="Avatar" /></div>
+                  </div>
+                  <div class="media-body">
+                    <h5>{{contact}}</h5>
+                    {% comment %} <div class="badge badge-success">آنلاین</div> {% endcomment %}
+                  </div>
+                  <div class="media-right">
+                    <ul>
+                      <li><a class="icon-btn btn-light button-effect mute" href="#"><i class="fa fa-volume-up"></i></a>
+                      </li>
+                      <li><a class="icon-btn btn-light search search-right" href="#"><i data-feather="search"></i></a>
+
+                      </li>
+                      <li><a class="icon-btn btn-light button-effect mobile-sidebar" href="#"><i
+                            data-feather="chevron-left"></i></a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <ul class="calls text-right">
+                  <li><a class="icon-btn btn-light button-effect" href="#" data-tippy-content="تماس صوتی سریع"
+                      data-toggle="modal" data-target="#audiocall"><i data-feather="phone"></i></a></li>
+                  <li><a class="icon-btn btn-light button-effect" href="#" data-tippy-content="تماس تصویری سریع"
+                      data-toggle="modal" data-target="#videocall"><i data-feather="video"></i></a></li>
+                  <li><a class="icon-btn btn-light button-effect apps-toggle" href="#"
+                      data-tippy-content="تمام برنامه ها"><i class="ti-layout-grid2"></i></a></li>
+                  <li class="chat-friend-toggle"><a class="icon-btn btn-light bg-transparent button-effect outside"
+                      href="#" data-tippy-content="عملیات سریع"><i data-feather="more-vertical"></i></a>
+                    <div class="chat-frind-content">
+                      <ul>
+                        <li><a class="icon-btn btn-outline-primary button-effect btn-sm" href="#"><i
+                              data-feather="user"></i></a>
+                          <h5>پروفایل</h5>
+                        </li>
+                        <li><a class="icon-btn btn-outline-success button-effect btn-sm" href="#"><i
+                              data-feather="plus-circle"></i></a>
+                          <h5>بایگانی</h5>
+                        </li>
+                        <li><a class="icon-btn btn-outline-danger button-effect btn-sm" href="#"><i
+                              data-feather="trash-2"></i></a>
+                          <h5>حذف</h5>
+                        </li>
+                        <li><a class="icon-btn btn-outline-light button-effect btn-sm" href="#"><i
+                              data-feather="slash"></i></a>
+                          <h5>مسدود</h5>
+                        </li>
+                      </ul>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="contact-chat">
+            <ul class="chatappend">
+            {% for i in pv.messages.all %}
+            {% if not i.is_deleted %}
+              <li class="{% if i.user == user %}sent{% else %}replies{% endif %}" id="{{i.id}}">
+                <div class="media">
+                  <div class="media-body">
+                    <div class="contact-name">
+                      <h5>{{i.user.get_full_name}}</h5>
+                      <h6>{{i.created|to_jalali:'%H:%M'}}</h6>
+                      <ul class="msg-box">
+                        <li class="msg-setting-main">
+                          <div class="msg-dropdown-main">
+                            <div class="msg-setting"><i class="ti-more-alt"></i></div>
+                            <div class="msg-dropdown">
+                              <ul>
+                                <li><a href="javascript:delete_message({{i.id}})"><i class="fa fa-star-o"></i>حذف برای همه</a></li>
+                                {% comment %} <li><a href="#"><i class="ti-trash"></i>حذف</a></li> {% endcomment %}
+                              </ul>
+                            </div>
+                          </div>
+                          <h5>{{i.text}}</h5>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              {% endif %}
+              {% endfor %}
+             
+            </ul>
+          </div>
+        </div>
+       
+        <div class="message-input">
+          <div class="wrap emojis-main">
+            
+            <input class="setemoj" id="message-input" type="text" placeholder="پیام خود را اینجا بنویسید..." />
+            <button class="submit icon-btn btn-primary" id="message-btn"><i
+                data-feather="send">
+              </i></button>
+           
+          </div>
+        </div>
+      </div>
+    </div>
+   
+  </div>
+  
+  <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script>
+  <script src="{% static 'assets/js/owl.carousel.js' %}"></script>
+  <script src="{% static 'assets/js/popper.min.js' %}"></script>
+  <script src="{% static 'assets/js/tippy-bundle.iife.min.js' %}"></script>
+  <script src="{% static 'assets/js/bootstrap.js' %}"></script>
+
+  <script src="{% static 'assets/js/easytimer.min.js' %}">        </script>
+  <script src="{% static 'assets/js/index.js' %}">        </script>
+  <script src="{% static 'assets/js/feather-icon/feather.min.js' %}"></script>
+  <script src="{% static 'assets/js/feather-icon/feather-icon.js' %}"></script>
+  {% comment %} <script src="{% static 'assets/js/ckeditor/ckeditor.js' %}"></script> {% endcomment %}
+  {% comment %} <script src="{% static 'assets/js/ckeditor/styles.js' %}"></script>
+  <script src="{% static 'assets/js/ckeditor/adapters/jquery.js' %}"></script>
+  <script src="{% static 'assets/js/ckeditor/ckeditor.custom.js' %}"></script> {% endcomment %}
+  <script src="{% static 'assets/js/date-picker/datepicker.js' %}"></script>
+  <script src="{% static 'assets/js/date-picker/datepicker.en.js' %}"></script>
+  <script src="{% static 'assets/js/date-picker/datepicker.custom.js' %}"></script>
+  {% comment %} <script src="{% static 'assets/js/tour/intro.js' %}"></script>
+  <script src="{% static 'assets/js/tour/intro-init.js' %}"></script> {% endcomment %}
+  <script src="{% static 'assets/js/jquery.magnific-popup.js' %}"></script>
+  <script src="{% static 'assets/js/zoom-gallery.js' %}"></script>
+  <script src="{% static 'assets/js/script.js' %}"></script>
+   
+   <script>
+
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/'
+            + {{pv.id}}
+            + '/'
+        );
+
+        // onmessage - An event listener to be called when a message is received from the server.
+        chatSocket.onmessage = function(e) {
+            // JSON.parse() converts the JSON object back into the original object,
+            // then examine and act upon its contents.
+            const data = JSON.parse(e.data);
+
+            if (data.type == "MESSAGE"){
+                  sender = "replies";
+
+                  if (data.user_id == {{user.id}}){
+                    sender = "send";
+                  }
+                  if ($.trim(data.message) == "") {
+                      return false;
+                    }
+                    $(
+                    `<li class="${sender}" id="${data.message_id}">
+                    <div class="media">
+                        <div class="profile mr-4" style="background-image: url('assets/images/contact/1.jpg'); 
+                        background-size: cover; background-position: center center;">
+                        </div>
+                        <div class="media-body">
+                            <div class="contact-name">
+                                <h5>${data.user_first_name}</h5>
+                                <h6>${data.time}</h6>
+                                <ul class="msg-box">
+                                    <li class="msg-setting-main">
+                                      <div class="msg-dropdown-main">
+                                        <div class="msg-setting"><i class="ti-more-alt"></i></div>
+                                        <div class="msg-dropdown">
+                                          <ul>
+                                            <li><a href="javascript:delete_message(${data.message_id})"><i class="fa fa-star-o"></i>حذف برای همه</a></li>
+                                          </ul>
+                                        </div>
+                                      </div>
+                                      <h5>${data.message}</h5>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </li>`
+                    ).appendTo($(".messages .chatappend"));
+            }
+            else if (data.type == "DELETE"){
+              $("#" + data.message_id).remove();
+            }
+        }
+
+        // onclose - An event listener to be called when the connection is closed.
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+
+        document.querySelector('#message-btn').onclick = function(e) {
+            const messageInputDom = document.querySelector('#message-input');
+            const message = messageInputDom.value;
+            console.log(message);
+
+            // Send the msg object as a JSON-formatted string.
+            chatSocket.send(JSON.stringify({
+                'type': 'MESSAGE',
+                'message': message
+            }));
+
+            // Blank the text input element, ready to receive the next line of text from the user.
+            messageInputDom.value = '';
+        };
+
+
+        function delete_message(message_id){
+          chatSocket.send(JSON.stringify({
+                'type': 'DELETE',
+                'message_id': message_id
+            }));
+        }
+    </script>
+</body>
+
+</html>

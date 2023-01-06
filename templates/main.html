@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+{% load static %}
+{% load jalali_tags %}
+<html lang="fa">
+
+<head>
+  <title>چیت چت - قالب html پیام رسان - پیام رسانی</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Chitchat">
+  <meta name="keywords" content="Chitchat">
+  <meta name="author" content="Chitchat">
+  <link rel="icon" href="assets/images/favicon/favicon.png" type="image/x-icon">
+  <link rel="shortcut icon" href="assets/images/favicon/favicon.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700,800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Rubik:300,300i,400,400i,500,500i,700,700i,900,900i&display=swap"
+    rel="stylesheet"> 
+  <link rel="stylesheet" type="text/css" href="{% static 'assets/css/date-picker.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'assets/css/magnific-popup.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}" media="screen" id="color">
+  <link rel="stylesheet" type="text/css" href="{% static 'assets/css/tour.css' %}">
+    <!-- Farsi fonts stylesheet ; for more information ; https://rastikerdar.github.io/vazirmatn/ -->
+  <link rel="stylesheet" href="{% static 'assets/fonts/vazir/Farsi-Digits/Vazirmatn-FD-font-face.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
+  <!-- Persian date-time picker -->
+  <link rel="stylesheet" href="{% static 'assets/css/jquery.md.bootstrap.datetimepicker.style.css' %}">
+  <style>
+    .replies .media .media-body .contact-name,
+    .replies .media .media-body .contact-name h5,
+    .replies .media .media-body .contact-name h6 {
+      direction: ltr;
+      text-align: left;
+    }
+
+    .msg-setting-main .msg-dropdown-main .msg-dropdown {
+      right: unset;
+      left: 0;
+      text-align: right;
+    }
+
+    .sent .media .media-body .msg-box .msg-setting-main .msg-dropdown-main .msg-dropdown ul li a {
+      color: #595959;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-content: space-between;
+      justify-content: space-between;
+    }
+
+    .sent .media .media-body .msg-box .msg-setting-main .msg-dropdown-main .msg-dropdown ul li a i {
+      font-size: 16px;
+      display: inline;
+      margin-left: 15px;
+      margin-right: unset;
+    }
+
+    .replies .media .media-body .msg-box .msg-setting-main .msg-dropdown-main .msg-dropdown ul li a {
+      color: #595959;
+      width: 100%;
+      display: flex;
+      flex-direction: row-reverse;
+      align-content: space-between;
+      justify-content: space-between;
+    }
+
+    .replies .media .media-body .msg-box .msg-setting-main .msg-dropdown-main .msg-dropdown ul li a i {
+      font-size: 16px;
+      display: inline;
+      margin-left: 15px;
+      margin-right: unset;
+    }
+
+    .app-list-ul .title {
+      border-bottom: 1px solid #eff1f2;
+      padding-bottom: 15px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app-list-ul li {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+
+<body class="rtl sidebar-active">
+  <div class="chitchat-loader">
+    <div><img src="assets/images/logo/logo_big.png" alt="" />
+      <h3>اپلیکیشنی سریع و ایمن برای پیام رسانی ..!</h3>
+    </div>
+  </div>
+  <div class="chitchat-container sidebar-toggle">
+    <nav class="main-nav on custom-scroll">
+      <div class="logo-warpper"><a href="messenger.html"><img src="assets/images/logo/logo.png" alt="logo" /></a></div>
+      <div class="sidebar-main">
+        <ul class="sidebar-top">
+          <li><a class="icon-btn btn-light button-effect" href="/" data-tippy-content="خانه"><i
+                class="fa fa-home"> </i></a></li>
+          <li><a class="icon-btn btn-light button-effect" href="settings" data-tippy-content="تنظیمات"
+              > <i class="fa fa-cog"></i></a></li>
+        </ul>
+        <ul class="sidebar-bottom">
+          <li><a class="icon-btn btn-light button-effect mode" href="#" data-tippy-content="حالت شب"
+              data-intro="تغییر حالت"><i class="fa fa-moon-o"></i></a></li>
+          <li><a class="icon-btn btn-light" href="login.html" data-tippy-content=" خروج"> <i class="fa fa-power-off">
+              </i></a></li>
+        </ul>
+      </div>
+    </nav>
+
+
+    <aside class="chitchat-left-sidebar left-disp">
+      <div class="recent-default dynemic-sidebar active">
+        <div class="recent">
+        </div>
+        <div class="chat custom-scroll">
+          <ul class="chat-cont-setting">
+            <li> <a href="#" data-toggle="modal" data-target="#msgchatModal"><span>گفتگوی جدید</span>
+                <div class="icon-btn btn-outline-primary button-effect btn-sm"><i data-feather="message-square"></i>
+                </div>
+              </a></li>
+            <li><a href="#" data-toggle="modal" data-target="#msgchModal"><span>کانال جدید</span>
+                <div class="icon-btn btn-outline-success button-effect btn-sm"><i data-feather="phone"></i></div>
+              </a></li>
+            <li><a href="#" data-toggle="modal" data-target="#msggpModal"><span>گروه جدید</span>
+                <div class="icon-btn btn-outline-danger button-effect btn-sm"><i data-feather="users"></i></div>
+              </a></li>
+          </ul>
+          <div class="theme-title">
+            <div class="media">
+              <div>
+                <h2>گفتگو</h2>
+                <h4>آغاز گفتگوی جدید</h4>
+              </div>
+              <div class="media-body text-right"> <a class="icon-btn btn-outline-light btn-sm search contact-search"
+                  href="#"> <i data-feather="search"></i></a>
+                <form class="form-inline search-form">
+                  <div class="form-group">
+                    <input class="form-control-plaintext" type="search" placeholder="جستجو.." />
+                    <div class="icon-close close-search"> </div>
+                  </div>
+                </form><a class="icon-btn btn-primary btn-fix chat-cont-toggle outside" href="#"><i
+                    data-feather="plus"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="theme-tab tab-sm chat-tabs">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <li class="nav-item" data-to="chat-content"><a class="nav-link button-effect active" id="chat-tab"
+                  data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="true"
+                  data-intro="آغاز گفتگو"><i data-feather="message-square"> </i>گفتگو</a></li>
+              <li class="nav-item" data-to="call-content"><a class="nav-link button-effect" id="call-tab"
+                  data-toggle="tab" href="#call" role="tab" aria-controls="call" aria-selected="false"><i
+                    data-feather="phone"> </i>تماس</a></li>
+              <li class="nav-item" data-to="contact-content"><a class="nav-link button-effect" id="contact-tab"
+                  data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"> <i
+                    data-feather="users"> </i>مخاطبین</a></li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+              <div class="tab-pane fade show active" id="chat" role="tabpanel" aria-labelledby="chat-tab">
+                <div class="theme-tab">
+                  
+                  <div class="tab-content" id="myTabContent1">
+                    <div class="tab-pane fade show active" id="direct" role="tabpanel" aria-labelledby="direct-tab">
+                      <ul class="chat-main">
+                       
+                        {% for pv in pvs %}
+                        <li data-to="blank">
+                        
+                          <div class="chat-box">
+                          <a href="{% url 'chat:pv' pv_id=pv.id %}">
+                            <div class="profile online"><img class="bg-img" src="assets/images/contact/2.jpg"
+                                alt="Avatar" /></div>
+                            <div class="details">
+                              {% if user == pv.user1 %}
+                                <h5>{{pv.user2.get_full_name}}</h5>
+                              {% else %}
+                              <h5>{{pv.user1.get_full_name}}</h5>
+                              {% endif %}
+                              <h6>آخرین بازدید به تازگی</h6>
+                            </div>
+                            </a>
+                            <div class="date-status"><i class="ti-pin2"></i>
+                              <h6>{{pv.created|to_jalali:'%y/%m/%d'}}</h6>
+                            </div>
+                          </div>
+                          
+                        </li>
+                        {% endfor %}
+                        
+                      </ul>
+                    </div>
+                    <div class="tab-pane fade" id="group" role="tabpanel" aria-labelledby="group-tab">
+                      <div class="search2">
+                        <div>
+                          <div class="input-group">
+                            <div class="input-group-append"><span class="input-group-text"><i
+                                  class="fa fa-search"></i></span></div>
+                            <input class="form-control" type="text" placeholder="جستجو" />
+                          </div>
+                        </div>
+                      </div>
+                      <ul class="group-main">
+                        <li class="active" data-to="group_chat">
+                          <div class="group-box">
+                            <div class="profile"><img class="bg-img" src="assets/images/avtar/teq.jpg" alt="Avatar" />
+                            </div>
+                            <div class="details">
+                              <h5>گروه تکنولوژی</h5>
+                              <h6>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان
+                                گرافیک است. </h6>
+                            </div>
+                            <div class="date-status">
+                              <ul class="grop-icon">
+                                <li><a class="group-tp" href="#" data-tippy-content="الهام جعفری"> <img
+                                      src="assets/images/contact/1.jpg" alt="group-icon-img" /></a>
+                                </li>
+                                <li><a class="group-tp" href="#" data-tippy-content="سعید "> <img
+                                      src="assets/images/contact/2.jpg" alt="group-icon-img" /></a>
+                                </li>
+                                <li><a class="group-tp" href="#" data-tippy-content="رویا"> <img
+                                      src="assets/images/contact/3.jpg" alt="group-icon-img" /></a></li>
+                                <li>+ 35</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </li>
+                        <li data-to="group_blank">
+                          <div class="group-box">
+                            <div class="profile"><img class="bg-img" src="assets/images/avtar/family.jpg"
+                                alt="Avatar" /></div>
+                            <div class="details">
+                              <h5>دورهمی</h5>
+                              <h6>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان
+                                گرافیک است. </h6>
+                            </div>
+                            <div class="date-status">
+                              <ul class="grop-icon">
+                                <li><a class="group-tp" href="#" data-tippy-content="الهام جعفری"> <img
+                                      src="assets/images/contact/1.jpg" alt="group-icon-img" /></a>
+                                </li>
+                                <li><a class="group-tp" href="#" data-tippy-content="سعید "> <img
+                                      src="assets/images/contact/2.jpg" alt="group-icon-img" /></a>
+                                </li>
+                                <li><a class="group-tp" href="#" data-tippy-content="رویا"> <img
+                                      src="assets/images/contact/3.jpg" alt="group-icon-img" /></a></li>
+                                <li>+ 12</li>
+                              </ul>
+                              <div class="badge badge-primary"></div>
+                            </div>
+                          </div>
+                        </li>
+                        <li data-to="group_blank">
+                          <div class="group-box">
+                            <div class="profile bg-danger"><span>HT</span></div>
+                            <div class="details">
+                              <h5>فیلم و سریال</h5>
+                              <h6>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان
+                                گرافیک است. </h6>
+                            </div>
+                          </div>
+                        </li>
+                        <li data-to="group_blank">
+                          <div class="group-box">
+                            <div class="profile"><img class="bg-img" src="assets/images/avtar/girls.jpg" alt="Avatar" />
+                            </div>
+                            <div class="details">
+                              <h5>باشگاه پرسپولیس</h5>
+                              <h6>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان
+                                گرافیک است. </h6>
+                            </div>
+                          </div>
+                        </li>
+                        <li data-to="group_blank">
+                          <div class="group-box">
+                            <div class="profile bg-success"><span>CE</span></div>
+                            <div class="details">
+                              <h5>مهندسان فضایی</h5>
+                              <h6>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان
+                                گرافیک است. </h6>
+                            </div>
+                            <div class="date-status"></div>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+   
+
+   
+   
+  </div>
+  
+
+
+  <div class="modal fade add-popup msg-chat-modal" id="msgchatModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">
+            ارسال پیام جدید</h2>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <div class="chat-msg-search">
+            <div class="input-group">
+              <input id="pv-username" class="form-control" type="tel" placeholder="شماره تماس" aria-label="Recipient's username"
+                aria-describedby="basic-addon21" />
+              
+              <a class="nav-link button-effect" onclick="javascript:start_pv()">شروع چت</a>
+
+            </div>
+          </div>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade add-popup msg-chat-modal" id="msgchModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">
+              ایجاد کانال</h2>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <div class="chat-msg-search">
+            <form class="input-group" method="POST" action="{% url 'main:start_group' %}">
+              <input  class="form-control" type="text" name="name" placeholder="نام کانال" aria-label="Recipient's username"
+                aria-describedby="basic-addon21" />
+              {% csrf_token %}
+              <input  class="form-control" type="text" name="desc" placeholder="بیو" aria-label="Recipient's username"
+                aria-describedby="basic-addon21" />
+              
+              <input hidden class="form-control" type="text" name="type" value="2" placeholder="بیو" aria-label="Recipient's username"
+                aria-describedby="basic-addon21" />
+              
+              <input class="nav-link button-effect" value="ایجاد کانال" type="submit">
+
+            </form>
+          </div>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="modal fade add-popup msg-chat-modal" id="msggpModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">
+              ایجاد گروه</h2>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <div class="chat-msg-search">
+            <form class="input-group" method="POST" action="{% url 'main:start_group' %}">
+              {% csrf_token %}
+              <input  class="form-control" type="text" name="name" placeholder="نام گروه" aria-label="Recipient's username"
+                aria-describedby="basic-addon21" />
+              
+              <input  class="form-control" type="text" name="desc" placeholder="بیو" aria-label="Recipient's username"
+                aria-describedby="basic-addon21" />
+              
+              <input hidden class="form-control" type="text" name="type" value="1" placeholder="بیو" aria-label="Recipient's username"
+                aria-describedby="basic-addon21" />
+              
+              <input class="nav-link button-effect" value="ایجاد گروه" type="submit">
+
+            </form>
+          </div>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script>
+  <script src="{% static 'assets/js/owl.carousel.js' %}"></script>
+  <script src="{% static 'assets/js/popper.min.js' %}"></script>
+  <script src="{% static 'assets/js/tippy-bundle.iife.min.js' %}"></script>
+  <script src="{% static 'assets/js/bootstrap.js' %}"></script>
+
+  <script src="{% static 'assets/js/easytimer.min.js' %}">        </script>
+  <script src="{% static 'assets/js/index.js' %}">        </script>
+  <script src="{% static 'assets/js/feather-icon/feather.min.js' %}"></script>
+  <script src="{% static 'assets/js/feather-icon/feather-icon.js' %}"></script>
+  {% comment %} <script src="{% static 'assets/js/ckeditor/ckeditor.js' %}"></script> {% endcomment %}
+  {% comment %} <script src="{% static 'assets/js/ckeditor/styles.js' %}"></script>
+  <script src="{% static 'assets/js/ckeditor/adapters/jquery.js' %}"></script>
+  <script src="{% static 'assets/js/ckeditor/ckeditor.custom.js' %}"></script> {% endcomment %}
+  <script src="{% static 'assets/js/date-picker/datepicker.js' %}"></script>
+  <script src="{% static 'assets/js/date-picker/datepicker.en.js' %}"></script>
+  <script src="{% static 'assets/js/date-picker/datepicker.custom.js' %}"></script>
+  {% comment %} <script src="{% static 'assets/js/tour/intro.js' %}"></script>
+  <script src="{% static 'assets/js/tour/intro-init.js' %}"></script> {% endcomment %}
+  <script src="{% static 'assets/js/jquery.magnific-popup.js' %}"></script>
+  <script src="{% static 'assets/js/zoom-gallery.js' %}"></script>
+  <script src="{% static 'assets/js/script.js' %}"></script>
+
+  <script>
+    function start_pv(){
+      username = $('#pv-username')[0].value;
+
+      var url = new URL(window.location.href);
+      window.location.href = 'start-pv/' + username;
+    }
+  </script>
+</body>
+
+</html>

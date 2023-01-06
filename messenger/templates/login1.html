@@ -1,0 +1,26 @@
+{% extends "login.html" %}
+{% load static %}
+
+    {% block content %}
+              <div class="login-content">
+                <div class="login-content-header"><img class="image-fluid" src="{% static 'assets/images/logo/landing-logo.png' %}"
+                    alt="images"></div>
+                <h3>پیام رسان ایمن و سریع</h3>
+                <h4>برای استفاده وارد حساب کاربری خود شوید.</h4>
+                <form class="form1" method="POST">
+                    {% csrf_token %}
+                  <div class="form-group">
+                    <label class="col-form-label">شماره تماس</label>
+                    <input class="form-control"  type="tel" name="username" placeholder="شماره تماس خود را وارد کنید" required>
+                  </div>
+                  <div class="form-group">
+                    <div class="buttons d-flex"><input class="btn btn-primary button-effect" style="margin: auto" type="submit" value="ارسال کد تایید"></div>
+                  </div>
+                </form>
+               
+                
+                <div class="termscondition">
+                  <h4 class="mb-0"><span>*</span>شرایط و قوانین استفاده<b>&amp;</b>سیاست حریم خصوصی</h4>
+                </div>
+              </div>
+            {% endblock %}

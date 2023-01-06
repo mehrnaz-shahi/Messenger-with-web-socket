@@ -30,7 +30,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     username =  models.CharField(max_length = 12, unique = True)
     first_name = models.CharField(max_length = 50, blank = True, null = True)
     last_name = models.CharField(max_length = 50, blank = True, null = True)
-    email = models.EmailField(unique=True)
+    email = models.EmailField(blank = True, null = True)
     date_joined = models.DateTimeField(default = timezone.now)
     image = models.ImageField(blank=True, null=True, upload_to="accounts/images/")
     
@@ -40,8 +40,12 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     email_public = models.BooleanField(default=False)
     image_public = models.BooleanField(default=True)
 
+    rcode = models.CharField(blank=True, null=True, max_length=5)
+
     is_active = models.BooleanField(default = True, verbose_name = "فعال")
     is_staff = models.BooleanField( default = False)
+
+    register_complete = models.BooleanField(default=False)
 
     objects = UserProfileManager()
 

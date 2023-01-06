@@ -6,8 +6,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.utils import timezone
 from random import randint
-from . import models
 from django.utils import timezone
+
+import boto3
+from botocore.exceptions import ClientError
 
 from urllib.parse import unquote
 
@@ -15,11 +17,13 @@ import datetime
 import requests
 import http.client
 import json
-from random import randint
+import random
 
 import mimetypes
 import os
 from django.http.response import HttpResponse
+
+from . import models
 
 
 def get_sms_token():
@@ -42,124 +46,103 @@ def get_sms_token():
 
 
 
+
+
+
+def login1_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        rcode = random.randint(1111, 9999)
+
+        user = models.UserProfile.objects.filter(username=username)
+
+        if not user:
+            user = models.UserProfile(username=username)
+        else:
+            user = user[0]
+        
+        user.rcode = rcode
+        user.save()
+
+
+        print(rcode)
+
+        return HttpResponseRedirect(reverse('account:validate') + "?username={}".format(user.username))
+
+
+    return render(request, 'login1.html')
+
+
+
+def login2_view(request):
+
+    error = ''
+
+    if request.method == 'POST':
+        username =  request.POST.get('username')
+        rcode =  request.POST.get('rcode')
+
+        user = models.UserProfile.objects.filter(username=username, rcode=rcode)
+        if user:
+            user = user[0]
+            if user.register_complete:
+                login(request, user)
+                return HttpResponseRedirect('/')
+            else:
+                return HttpResponseRedirect(reverse('account:register') + "?username={}".format(user.username))
+        else:
+            error = 'کد تایید صحیح نمی‌باشد'
+
+
+
+
+    username = request.GET.get('username')
+
+    context = {
+        'username': username,
+        'error': error
+    }
+    return render(request, 'login2.html', context)
+
+
+
+def login3_view(request):
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        username = request.POST.get('username')
+        print('1', first_name, username)
+
+        user = models.UserProfile.objects.filter(username=username)
+
+        if not user:
+            return HttpResponseRedirect('/')
+
+        user = user[0]
+        user.first_name = first_name
+        user.last_name = last_name
+        user.email = email
+        user.register_complete = True
+        user.save()
+        login(request, user)
+        return HttpResponseRedirect('/')
+
+
+    username = request.GET.get('username')
+
+    context = {
+        'username': username,
+    }
+
+    return render(request, 'login3.html', context)
+
+
+
+
+
+
+
 def logout_view(request):
     logout(request)
     return redirect('main:index')
-
-
-def account_view(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-      
-        user = models.UserProfile.objects.filter(username = username)
-        if user.count() and user[0].phone_valid:
-            user = user[0]
-            user.first_name = first_name
-            user.last_name = last_name
-            user.register_complete = True
-
-            user.save()
-            login(request, user)
-            return HttpResponse("login")
-
-
-    return render(request, 'account.html')
-
-def ajax_val_phone(request):
-    username = request.GET.get('username', None)
-    users = models.UserProfile.objects.filter(username = username)
-    if users.count() and users[0].register_complete:
-            user = users[0]
-            user.r_code_time = timezone.now()
-            user.r_code = randint(1111, 9999)
-            user.save()
-            conn = http.client.HTTPSConnection("restfulsms.com")
-
-            payload = {
-                    'ParameterArray': [
-                        { "Parameter": "VerificationCode","ParameterValue": str(user.r_code)},
-                        ],
-
-                    "Mobile": user.username,
-                    "TemplateId": "71242",
-                }
-            payload = json.dumps(payload)
-
-
-            headers = {
-                'x-sms-ir-secure-token': get_sms_token(),
-                'content-type': "application/json",
-                'cache-control': "no-cache",
-                'postman-token': "48885b70-56a0-a612-3b1d-ed05385e3f05"
-                }
-
-            conn.request("POST", "/api/UltraFastSend", payload, headers)
-
-            res = conn.getresponse()
-            data = res.read()
-            # print(user.r_code)
-
-            return JsonResponse({'regsiter':False, 'username':username})
-    else:
-        if users.count():
-            user = users[0]
-        else:
-            user = models.UserProfile(username = username)
-            
-        user.r_code_time = timezone.now()
-        user.r_code = randint(1111, 9999)
-        user.save()
-        conn = http.client.HTTPSConnection("restfulsms.com")
-
-        payload = {
-                    'ParameterArray': [
-                        { "Parameter": "VerificationCode","ParameterValue": str(user.r_code)},
-                        ],
-
-                    "Mobile": user.username,
-                    "TemplateId": "71242",
-                }
-        payload = json.dumps(payload)
-
-        headers = {
-                'x-sms-ir-secure-token': get_sms_token(),
-                'content-type': "application/json",
-                'cache-control': "no-cache",
-                'postman-token': "48885b70-56a0-a612-3b1d-ed05385e3f05"
-                }
-
-        conn.request("POST", "/api/UltraFastSend", payload, headers)
-
-        res = conn.getresponse()
-        data = res.read()
-        # print(user.r_code)
-
-        return JsonResponse({'regsiter':True, 'username':username})
-
-
-
-
-def ajax_val_rcode(request):
-    username = request.GET.get('username', None)
-    rcode = request.GET.get('rcode', None)
-    user = models.UserProfile.objects.filter(username = username)
-
-    if user.count():
-        user = user[0]
-        if int(rcode) == user.r_code:
-            user.phone_valid = True
-            user.save()
-            
-            register = True
-            if user.register_complete:
-                login(request, user)
-                register = False
-
-            return JsonResponse({'valid':True, 'register': register})
-
-    return JsonResponse({'valid':False})
-
-
-

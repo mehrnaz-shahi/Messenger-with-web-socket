@@ -18,6 +18,13 @@ TEMPLATE_DIR = BASE_DIR /  'templates'
 STATIC_DIR = BASE_DIR /  'static'
 MEDIA_DIR = BASE_DIR /  'media'
 
+ASGI_APPLICATION = "messenger.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -40,9 +47,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     'jalali_date',
     'main',
-    'account'
+    'account',
+    'chat'
 ]
 
 MIDDLEWARE = [

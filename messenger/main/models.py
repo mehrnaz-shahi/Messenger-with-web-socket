@@ -44,8 +44,9 @@ class PV(models.Model):
 
 
 class PVMessage(models.Model):
-    pv = models.ForeignKey(PV, on_delete=models.CASCADE)
-    user = models.CharField(max_length=2, choices= ( ('1', 'User1'), ('2', 'User2')))
+    created = models.DateTimeField(default = timezone.now)
+    pv = models.ForeignKey(PV, on_delete=models.CASCADE, related_name='messages')
+    user = models.ForeignKey(account.UserProfile, related_name='userpvmessages',on_delete=models.CASCADE)
     text = models.TextField(blank=True, null=True)
     media = models.FileField(blank=True, null=True, upload_to="pv/messages/")
     is_deleted = models.BooleanField(default=False)

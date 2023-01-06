@@ -13,7 +13,7 @@ class UserProfileAdmin(ModelAdminJalaliMixin, UserAdmin):
     search_fields = ['username', 'first_name', 'last_name']
     list_filter = ('is_active',)
     fieldsets = (
-        (None, {'fields': ('username', 'password', 'date_joined', ('first_name', 'last_name'), 'email', 'image', 'userid', 'username_public', 'image_public', 'email_public', 'is_active' )}),    )
+        (None, {'fields': ('username', 'password', 'date_joined', ('first_name', 'last_name'), 'email', 'image', 'userid', 'username_public', 'image_public', 'email_public', 'rcode', 'is_active' )}),    )
 
     ordering = ('-date_joined', 'username', 'first_name', 'last_name', 'is_active',)
     filter_horizontal = ()

@@ -1,11 +1,9 @@
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser, AbstractUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
 from django.apps import apps
-
-# from main import models as main
 
 """
 User
@@ -44,15 +42,18 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     rcode = models.CharField(blank=True, null=True, max_length=5)
 
     is_active = models.BooleanField(default = True, verbose_name = "فعال")
+    # can access admin panel?
     is_staff = models.BooleanField( default = False)
 
     register_complete = models.BooleanField(default=False)
 
     objects = UserProfileManager()
 
+    #specify username field for superuser
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'email']
 
+    #promtet for superuser
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'email']
 
     def get_full_name(self):
         return '{} {}'.format(self.first_name, self.last_name)

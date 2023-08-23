@@ -1,3 +1,3 @@
 # Messenger-with-web-socket
 
-This a messenger is writen by Django, HTML, CSS, Javascript, and uses websocket.
+This messenger is written by Django, HTML, CSS, Javascript, and uses WebSocket.

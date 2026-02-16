@@ -429,17 +429,7 @@
             </div></li><li data-attr="dark"><div class="sidebar"></div><div class="sidebar-content"></div></li>
             <li data-attr="colorfull"><div class="sidebar"></div><div class="sidebar-content"></div></li></ul></div>
             <div class="chat-wallpaper"><h5>پس زمینه چت</h5><ul class="wallpaper"><li class="bg-color bg-default active">
-            </li><li class="bg-size" style="background-image: url('assets/images/wallpaper/2.jpg'); background-size: cover; background-position: center center; display: block;">
-            <img class="bg-img" src='assets/images/wallpaper/2.jpg' alt="Avatar" style="display: none;"></li>
-            <li class="bg-size" style="background-image: url('assets/images/wallpaper/3.jpg'); background-size: cover; background-position: center center; display: block;">
-            <img class="bg-img" src='assets/images/wallpaper/3.jpg' alt="Avatar" style="display: none;"></li>
-            <li class="bg-size" style="background-image: url('assets/images/wallpaper/4.jpg');background-size: 'cover'; background-position: 'center center'; display: 'block';">
-             <img class="bg-img" src="assets/images/wallpaper/4.jpg" alt="Avatar" style="display: none;"></li>
-             <li class="bg-size" style="background-image: url('assets/images/wallpaper/5.jpg'); background-size: cover;
-              background-position: center center; display: block;"><img class="bg-img" src='assets/images/wallpaper/5.jpg'
-               alt="Avatar" style="display: none;"></li><li class="bg-size" style="background-image: url('assets/images/wallpaper/1.jpg');
-                background-size: cover; background-position: center center; display: block;"><img class="bg-img" src='assets/images/wallpaper/1.jpg'
-                 alt="Avatar" style="display: none;"></li> <br><li class="bg-color grediant-1"></li><li class="bg-color grediant-2"></li>
+            </li><li class="bg-color grediant-1"></li><li class="bg-color grediant-2"></li>
                  <li class="bg-color grediant-3"></li><li class="bg-color grediant-4"></li><li class="bg-color grediant-5"></li>
                  <li class="bg-color grediant-6"></li></ul></div><div class="sidebar-setting"><h5>سایدبار</h5><ul><li class="active three-column">
                  <div class="sm-sidebar"></div><div class="sidebar"></div><div class="sidebar-content"></div></li><li class="two-column">
@@ -831,7 +821,7 @@
   $(".sticker-contain ul li").on("click", function (e) {
     var sticker = $(this).children().html();
     $(
-      '<li class="replies"> <div class="media"> <div class="profile mr-4 bg-size" style="background-image: url("assets/images/contact/1.jpg"); background-size: cover; background-position: center center;"></div><div class="media-body"> <div class="contact-name"> <h5>الهام جعفری</h5> <h6>01:42 صبح</h6> <ul class="msg-box"> <li> <h5>' +
+      '<li class="replies"> <div class="media"> <div class="profile mr-4 bg-size"></div><div class="media-body"> <div class="contact-name"> <h5>الهام جعفری</h5> <h6>01:42 صبح</h6> <ul class="msg-box"> <li> <h5>' +
         sticker +
         "</h5> </li></ul> </div></div></div></li>"
     ).appendTo($(".messages .chatappend"));

@@ -11,8 +11,8 @@
   <meta name="description" content="Chitchat">
   <meta name="keywords" content="Chitchat">
   <meta name="author" content="Chitchat">
-  <link rel="icon" href="assets/images/favicon/favicon.png" type="image/x-icon">
-  <link rel="shortcut icon" href="assets/images/favicon/favicon.png" type="image/x-icon">
+  <link rel="icon" href="{% static 'assets/images/favicon/favicon.png' %}" type="image/x-icon">
+  <link rel="shortcut icon" href="{% static 'assets/images/favicon/favicon.png' %}" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700,800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Rubik:300,300i,400,400i,500,500i,700,700i,900,900i&display=swap"
@@ -96,13 +96,13 @@
 
 <body class="rtl sidebar-active">
   <div class="chitchat-loader">
-    <div><img src="assets/images/logo/logo_big.png" alt="" />
+  <div><img src="{% static 'assets/images/logo/logo_big.png' %}" alt="" />
       <h3>اپلیکیشنی سریع و ایمن برای پیام رسانی ..!</h3>
     </div>
   </div>
   <div class="chitchat-container sidebar-toggle">
     <nav class="main-nav on custom-scroll">
-      <div class="logo-warpper"><a href="messenger.html"><img src="assets/images/logo/logo.png" alt="logo" /></a></div>
+      <div class="logo-warpper"><a href="/"><img src="{% static 'assets/images/logo/logo.png' %}" alt="logo" /></a></div>
       <div class="sidebar-main">
         <ul class="sidebar-top">
           <li><a class="icon-btn btn-light button-effect" href="/" data-tippy-content="خانه"><i
@@ -180,7 +180,7 @@
                         
                           <div class="chat-box">
                           <a href="{% url 'chat:pv' pv_id=pv.id %}">
-                            <div class="profile online"><img class="bg-img" src="assets/images/contact/2.jpg"
+                            <div class="profile online"><img class="bg-img" src="{% static 'assets/images/contact/2.jpg' %}"
                                 alt="Avatar" /></div>
                             <div class="details">
                               {% if user == pv.user1 %}
@@ -204,7 +204,7 @@
                         
                           <div class="chat-box">
                           <a href="{% url 'group:group' group_id=g.id %}">
-                            <div class="profile online"><img class="bg-img" src="assets/images/contact/2.jpg"
+                            <div class="profile online"><img class="bg-img" src="{% static 'assets/images/contact/2.jpg' %}"
                                 alt="Avatar" /></div>
                             <div class="details">
                               <h5>{{g.name}}</h5>
@@ -234,7 +234,7 @@
                       <ul class="group-main">
                         <li class="active" data-to="group_chat">
                           <div class="group-box">
-                            <div class="profile"><img class="bg-img" src="assets/images/avtar/teq.jpg" alt="Avatar" />
+                            <div class="profile"><img class="bg-img" src="{% static 'assets/images/avtar/teq.jpg' %}" alt="Avatar" />
                             </div>
                             <div class="details">
                               <h5>گروه تکنولوژی</h5>
@@ -244,13 +244,13 @@
                             <div class="date-status">
                               <ul class="grop-icon">
                                 <li><a class="group-tp" href="#" data-tippy-content="الهام جعفری"> <img
-                                      src="assets/images/contact/1.jpg" alt="group-icon-img" /></a>
+                                      src="{% static 'assets/images/contact/1.jpg' %}" alt="group-icon-img" /></a>
                                 </li>
                                 <li><a class="group-tp" href="#" data-tippy-content="سعید "> <img
-                                      src="assets/images/contact/2.jpg" alt="group-icon-img" /></a>
+                                      src="{% static 'assets/images/contact/2.jpg' %}" alt="group-icon-img" /></a>
                                 </li>
                                 <li><a class="group-tp" href="#" data-tippy-content="رویا"> <img
-                                      src="assets/images/contact/3.jpg" alt="group-icon-img" /></a></li>
+                                      src="{% static 'assets/images/contact/3.jpg' %}" alt="group-icon-img" /></a></li>
                                 <li>+ 35</li>
                               </ul>
                             </div>
@@ -258,7 +258,7 @@
                         </li>
                         <li data-to="group_blank">
                           <div class="group-box">
-                            <div class="profile"><img class="bg-img" src="assets/images/avtar/family.jpg"
+                            <div class="profile"><img class="bg-img" src="{% static 'assets/images/avtar/family.jpg' %}"
                                 alt="Avatar" /></div>
                             <div class="details">
                               <h5>دورهمی</h5>
@@ -268,13 +268,13 @@
                             <div class="date-status">
                               <ul class="grop-icon">
                                 <li><a class="group-tp" href="#" data-tippy-content="الهام جعفری"> <img
-                                      src="assets/images/contact/1.jpg" alt="group-icon-img" /></a>
+                                      src="{% static 'assets/images/contact/1.jpg' %}" alt="group-icon-img" /></a>
                                 </li>
                                 <li><a class="group-tp" href="#" data-tippy-content="سعید "> <img
-                                      src="assets/images/contact/2.jpg" alt="group-icon-img" /></a>
+                                      src="{% static 'assets/images/contact/2.jpg' %}" alt="group-icon-img" /></a>
                                 </li>
                                 <li><a class="group-tp" href="#" data-tippy-content="رویا"> <img
-                                      src="assets/images/contact/3.jpg" alt="group-icon-img" /></a></li>
+                                      src="{% static 'assets/images/contact/3.jpg' %}" alt="group-icon-img" /></a></li>
                                 <li>+ 12</li>
                               </ul>
                               <div class="badge badge-primary"></div>
@@ -293,7 +293,7 @@
                         </li>
                         <li data-to="group_blank">
                           <div class="group-box">
-                            <div class="profile"><img class="bg-img" src="assets/images/avtar/girls.jpg" alt="Avatar" />
+                            <div class="profile"><img class="bg-img" src="{% static 'assets/images/avtar/girls.jpg' %}" alt="Avatar" />
                             </div>
                             <div class="details">
                               <h5>باشگاه پرسپولیس</h5>

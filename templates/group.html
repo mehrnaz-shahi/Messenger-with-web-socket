@@ -18,7 +18,7 @@
               <div class="col-7">
                 <div class="media left">
                   <div class="media-left mr-3">
-                    <div class="profile online menu-trigger"><img class="bg-img" src="assets/images/contact/2.jpg"
+                    <div class="profile online menu-trigger"><img class="bg-img" src="{% static 'assets/images/contact/2.jpg' %}"
                         alt="Avatar" /></div>
                   </div>
                   <div class="media-body">
@@ -204,7 +204,7 @@
                     $(
                     `<li class="${sender}" id="${data.message_id}">
                     <div class="media">
-                        <div class="profile mr-4" style="background-image: url('assets/images/contact/1.jpg'); 
+                        <div class="profile mr-4" style="background-image: url('{% static 'assets/images/contact/1.jpg' %}'); 
                         background-size: cover; background-position: center center;">
                         </div>
                         <div class="media-body">
@@ -234,7 +234,7 @@
                         $(
                     `<li class="${sender}" id="${data.message_id}">
                     <div class="media">
-                        <div class="profile mr-4" style="background-image: url('assets/images/contact/1.jpg'); 
+                        <div class="profile mr-4" style="background-image: url('{% static 'assets/images/contact/1.jpg' %}'); 
                         background-size: cover; background-position: center center;">
                         </div>
                         <div class="media-body">

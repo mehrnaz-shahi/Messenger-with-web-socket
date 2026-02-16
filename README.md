@@ -64,20 +64,6 @@ If you prefer running via Daphne explicitly:
 daphne messenger.asgi:application
 ```
 
-### Static files & assets
-
-- Static root: `static/`
-- Frontend assets: `static/assets/...`
-
-To avoid 404s for images, ensure the following directories and images exist (create/copy from the original template if needed):
-
-- `static/assets/images/logo/` – `logo.png`, `logo_big.png`
-- `static/assets/images/favicon/` – `favicon.png`
-- `static/assets/images/contact/` – `1.jpg`, `2.jpg`, `3.jpg`
-- `static/assets/images/avtar/` – `teq.jpg`, `girls.jpg`, `family.jpg`
-- `static/assets/images/wallpaper/` – `1.jpg`–`5.jpg` (if you enable chat wallpapers)
-- `static/assets/images/login_signup/` – images used on the login pages
-
 ### Key features
 
 - One-to-one and group chats

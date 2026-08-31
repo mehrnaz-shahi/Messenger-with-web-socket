@@ -10,6 +10,9 @@
                 {% if error %}
                 <h4>{{error}}</h4>
                 {% endif %}
+                {% if debug_otp %}
+                <h4>کد تایید (حالت توسعه): {{ debug_otp }}</h4>
+                {% endif %}
                 <form class="form1" method="POST">
                 {% csrf_token %}
 

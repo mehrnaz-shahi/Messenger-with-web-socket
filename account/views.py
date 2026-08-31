@@ -1,29 +1,19 @@
+from django.conf import settings
+from django.contrib import messages
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.utils import timezone
-from random import randint
-from django.utils import timezone
+from django.contrib.auth import login, logout
 
-import boto3
-from botocore.exceptions import ClientError
-
-from urllib.parse import unquote
-
-import datetime
-import requests
 import http.client
 import json
+import logging
 import random
-
-import mimetypes
-import os
-from django.http.response import HttpResponse
+import sys
 
 from . import models
+
+logger = logging.getLogger('django')
 
 
 def get_sms_token():
@@ -61,11 +51,14 @@ def login1_view(request):
         else:
             user = user[0]
         
-        user.rcode = rcode
+        user.rcode = str(rcode)
         user.save()
 
-
-        print(rcode)
+        otp_line = f'OTP code for {user.username}: {rcode}'
+        print(otp_line, flush=True)
+        sys.stderr.write(otp_line + '\n')
+        sys.stderr.flush()
+        logger.warning(otp_line)
 
         return HttpResponseRedirect(reverse('account:validate') + "?username={}".format(user.username))
 
@@ -97,10 +90,16 @@ def login2_view(request):
 
 
     username = request.GET.get('username')
+    debug_otp = ''
+    if settings.DEBUG and username:
+        existing = models.UserProfile.objects.filter(username=username).first()
+        if existing and existing.rcode:
+            debug_otp = existing.rcode
 
     context = {
         'username': username,
-        'error': error
+        'error': error,
+        'debug_otp': debug_otp,
     }
     return render(request, 'login2.html', context)
 
@@ -146,3 +145,23 @@ def login3_view(request):
 def logout_view(request):
     logout(request)
     return redirect('main:index')
+
+
+def profile_view(request):
+    if not request.user.is_authenticated:
+        return redirect('account:account')
+
+    if request.method == 'POST':
+        user = request.user
+        user.first_name = (request.POST.get('first_name') or '').strip()
+        user.last_name = (request.POST.get('last_name') or '').strip()
+        user.email = (request.POST.get('email') or '').strip() or None
+        user.username_public = bool(request.POST.get('username_public'))
+        user.email_public = bool(request.POST.get('email_public'))
+        user.image_public = bool(request.POST.get('image_public'))
+        if request.FILES.get('image'):
+            user.image = request.FILES['image']
+        user.save()
+        messages.success(request, 'پروفایل با موفقیت به‌روزرسانی شد.')
+
+    return redirect('/?tab=profile')

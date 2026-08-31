@@ -30,7 +30,8 @@ class GroupConsumer(WebsocketConsumer):
             self.close()
 
     def disconnect(self, close_code):
-        # Leave room group
+        if not hasattr(self, 'room_group_name'):
+            return
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name,
             self.channel_name
@@ -54,7 +55,9 @@ class GroupConsumer(WebsocketConsumer):
                     return
             
                 group_member = group_member[0]
-                message = text_data_json['message']
+                message = (text_data_json.get('message') or '').strip()
+                if not message:
+                    return
                 gpmessage = main.GroupMessage(group_member=group_member, text=message)
                 gpmessage.save()
 

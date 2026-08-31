@@ -308,12 +308,17 @@
          07. Button Effect js
          ==========================*/
   $(".button-effect").on("click", function (e) {
-    e.preventDefault();
-    var self = $(this),
-      wave = ".effect-wave",
-      btnWidth = self.outerWidth(),
-      x = e.offsetX,
-      y = e.offsetY;
+    var self = $(this);
+    var href = self.attr("href");
+    var isSubmit = self.is('[type="submit"]');
+    var isRealLink = href && href !== "#" && href.indexOf("javascript") !== 0;
+    if (!isSubmit && !isRealLink && !self.attr("onclick")) {
+      e.preventDefault();
+    }
+    var wave = ".effect-wave";
+    var btnWidth = self.outerWidth();
+    var x = e.offsetX;
+    var y = e.offsetY;
     self.prepend('<span class="effect-wave"></span>');
     $(wave)
       .css({
@@ -723,11 +728,17 @@
 
   $(".messages").animate({ scrollTop: $(document).height() }, "fast");
   $(".submit").on("click", function () {
+    if (window.chatSocket) {
+      return;
+    }
     typingMessage();
     newMessage();
   });
   $(window).on("keydown", function (e) {
     if (e.which == 13) {
+      if (window.chatSocket) {
+        return;
+      }
       if (!e.target.value) {
         return false;
       }

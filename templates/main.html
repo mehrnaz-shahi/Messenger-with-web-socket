@@ -107,13 +107,13 @@
         <ul class="sidebar-top">
           <li><a class="icon-btn btn-light button-effect" href="/" data-tippy-content="خانه"><i
                 class="fa fa-home"> </i></a></li>
-          <li><a class="icon-btn btn-light button-effect" href="settings" data-tippy-content="تنظیمات"
-              > <i class="fa fa-cog"></i></a></li>
+          <li><a class="icon-btn btn-light button-effect" href="/?tab=profile" data-tippy-content="پروفایل"
+              > <i class="fa fa-user"></i></a></li>
         </ul>
         <ul class="sidebar-bottom">
           <li><a class="icon-btn btn-light button-effect mode" href="#" data-tippy-content="حالت شب"
               data-intro="تغییر حالت"><i class="fa fa-moon-o"></i></a></li>
-          <li><a class="icon-btn btn-light" href="login.html" data-tippy-content=" خروج"> <i class="fa fa-power-off">
+          <li><a class="icon-btn btn-light" href="{% url 'account:logout' %}" data-tippy-content=" خروج"> <i class="fa fa-power-off">
               </i></a></li>
         </ul>
       </div>
@@ -155,171 +155,127 @@
               </div>
             </div>
           </div>
+          {% if messages %}
+          <div class="app-flash-messages">
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+          </div>
+          {% endif %}
           <div class="theme-tab tab-sm chat-tabs">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
-              <li class="nav-item" data-to="chat-content"><a class="nav-link button-effect active" id="chat-tab"
+              <li class="nav-item" data-to="chat-content"><a class="nav-link button-effect {% if active_tab != 'contacts' and active_tab != 'profile' %}active{% endif %}" id="chat-tab"
                   data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="true"
                   data-intro="آغاز گفتگو"><i data-feather="message-square"> </i>گفتگو</a></li>
-              <li class="nav-item" data-to="call-content"><a class="nav-link button-effect" id="call-tab"
-                  data-toggle="tab" href="#call" role="tab" aria-controls="call" aria-selected="false"><i
-                    data-feather="phone"> </i>تماس</a></li>
-              <li class="nav-item" data-to="contact-content"><a class="nav-link button-effect" id="contact-tab"
+              <li class="nav-item" data-to="contact-content"><a class="nav-link button-effect {% if active_tab == 'contacts' %}active{% endif %}" id="contact-tab"
                   data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"> <i
                     data-feather="users"> </i>مخاطبین</a></li>
+              <li class="nav-item" data-to="profile-content"><a class="nav-link button-effect {% if active_tab == 'profile' %}active{% endif %}" id="profile-tab"
+                  data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"> <i
+                    data-feather="user"> </i>پروفایل</a></li>
             </ul>
             <div class="tab-content" id="myTabContent">
-              <div class="tab-pane fade show active" id="chat" role="tabpanel" aria-labelledby="chat-tab">
-                <div class="theme-tab">
-                  
-                  <div class="tab-content" id="myTabContent1">
-                    <div class="tab-pane fade show active" id="direct" role="tabpanel" aria-labelledby="direct-tab">
+              <div class="tab-pane fade {% if active_tab != 'contacts' and active_tab != 'profile' %}show active{% endif %}" id="chat" role="tabpanel" aria-labelledby="chat-tab">
                       <ul class="chat-main">
-                       
-                        {% for pv in pvs %}
-                        <li data-to="blank">
-                        
+                        {% if not chat_items and not groups %}
+                        <li>
+                          <div class="details">
+                            <h5>گفتگویی وجود ندارد</h5>
+                            <h6>از دکمه + یک چت، گروه یا کانال بسازید</h6>
+                          </div>
+                        </li>
+                        {% endif %}
+                        {% for item in chat_items %}
+                        <li>
                           <div class="chat-box">
-                          <a href="{% url 'chat:pv' pv_id=pv.id %}">
-                            <div class="profile online"><img class="bg-img" src="{% static 'assets/images/contact/2.jpg' %}"
-                                alt="Avatar" /></div>
+                          <a href="{% url 'chat:pv' pv_id=item.pv.id %}">
+                            <div class="profile online" style="background-image: url('{{ item.other.get_avatar_url }}'); background-size: cover; background-position: center;"><img class="bg-img" src="{{ item.other.get_avatar_url }}"
+                                alt="{{ item.other.get_full_name }}" /></div>
                             <div class="details">
-                              {% if user == pv.user1 %}
-                                <h5>{{pv.user2.get_full_name}}</h5>
-                              {% else %}
-                              <h5>{{pv.user1.get_full_name}}</h5>
-                              {% endif %}
-                              <h6>آخرین بازدید به تازگی</h6>
+                                <h5>{{ item.other.get_full_name }}</h5>
+                                <h6>{% if item.last %}{{ item.last.text }}{% else %}{{ item.other.username }}{% endif %}</h6>
                             </div>
                             </a>
-                            <div class="date-status"><i class="ti-pin2"></i>
-                              <h6>{{pv.created|to_jalali:'%y/%m/%d'}}</h6>
+                            <div class="date-status">
+                              <h6>{{ item.pv.created|to_jalali:'%y/%m/%d' }}</h6>
                             </div>
                           </div>
-                          
                         </li>
                         {% endfor %}
 
                         {% for g in groups %}
-                        <li data-to="blank">
-                        
+                        <li>
                           <div class="chat-box">
                           <a href="{% url 'group:group' group_id=g.id %}">
-                            <div class="profile online"><img class="bg-img" src="{% static 'assets/images/contact/2.jpg' %}"
-                                alt="Avatar" /></div>
+                            <div class="profile online" style="background-image: url('{{ g.get_avatar_url }}'); background-size: cover; background-position: center;"><img class="bg-img" src="{{ g.get_avatar_url }}"
+                                alt="{{ g.name }}" /></div>
                             <div class="details">
                               <h5>{{g.name}}</h5>
-                              <h6>{{g.desc}}</h6>
+                              <h6>{% if g.desc %}{{g.desc}}{% else %}{{ g.get_type_display }}{% endif %}</h6>
                             </div>
                             </a>
-                            <div class="date-status"><i class="ti-pin2"></i>
-                              
-                            </div>
                           </div>
-                          
                         </li>
                         {% endfor %}
-                        
                       </ul>
+              </div>
+
+              <div class="tab-pane fade {% if active_tab == 'contacts' %}show active{% endif %}" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                <form class="contact-add-form" method="POST" action="{% url 'main:add_contact' %}">
+                  {% csrf_token %}
+                  <input class="form-control" type="tel" name="username" placeholder="شماره تماس مخاطب" required>
+                  <button class="nav-link" type="submit">افزودن مخاطب</button>
+                </form>
+                <ul class="chat-main">
+                  {% if not contacts %}
+                  <li>
+                    <div class="details">
+                      <h5>مخاطبی وجود ندارد</h5>
+                      <h6>شماره تماس را وارد کنید یا یک گفتگو شروع کنید</h6>
                     </div>
-                    <div class="tab-pane fade" id="group" role="tabpanel" aria-labelledby="group-tab">
-                      <div class="search2">
-                        <div>
-                          <div class="input-group">
-                            <div class="input-group-append"><span class="input-group-text"><i
-                                  class="fa fa-search"></i></span></div>
-                            <input class="form-control" type="text" placeholder="جستجو" />
-                          </div>
+                  </li>
+                  {% endif %}
+                  {% for c in contacts %}
+                  <li>
+                    <div class="chat-box">
+                      <a href="{% url 'main:start_pv' username=c.person.username %}">
+                        <div class="profile" style="background-image: url('{{ c.person.get_avatar_url }}'); background-size: cover; background-position: center;"><img class="bg-img" src="{{ c.person.get_avatar_url }}" alt="{{ c.person.get_full_name }}" /></div>
+                        <div class="details">
+                          <h5>{{ c.person.get_full_name }}</h5>
+                          <h6>{{ c.person.username }}</h6>
                         </div>
-                      </div>
-                      <ul class="group-main">
-                        <li class="active" data-to="group_chat">
-                          <div class="group-box">
-                            <div class="profile"><img class="bg-img" src="{% static 'assets/images/avtar/teq.jpg' %}" alt="Avatar" />
-                            </div>
-                            <div class="details">
-                              <h5>گروه تکنولوژی</h5>
-                              <h6>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان
-                                گرافیک است. </h6>
-                            </div>
-                            <div class="date-status">
-                              <ul class="grop-icon">
-                                <li><a class="group-tp" href="#" data-tippy-content="الهام جعفری"> <img
-                                      src="{% static 'assets/images/contact/1.jpg' %}" alt="group-icon-img" /></a>
-                                </li>
-                                <li><a class="group-tp" href="#" data-tippy-content="سعید "> <img
-                                      src="{% static 'assets/images/contact/2.jpg' %}" alt="group-icon-img" /></a>
-                                </li>
-                                <li><a class="group-tp" href="#" data-tippy-content="رویا"> <img
-                                      src="{% static 'assets/images/contact/3.jpg' %}" alt="group-icon-img" /></a></li>
-                                <li>+ 35</li>
-                              </ul>
-                            </div>
-                          </div>
-                        </li>
-                        <li data-to="group_blank">
-                          <div class="group-box">
-                            <div class="profile"><img class="bg-img" src="{% static 'assets/images/avtar/family.jpg' %}"
-                                alt="Avatar" /></div>
-                            <div class="details">
-                              <h5>دورهمی</h5>
-                              <h6>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان
-                                گرافیک است. </h6>
-                            </div>
-                            <div class="date-status">
-                              <ul class="grop-icon">
-                                <li><a class="group-tp" href="#" data-tippy-content="الهام جعفری"> <img
-                                      src="{% static 'assets/images/contact/1.jpg' %}" alt="group-icon-img" /></a>
-                                </li>
-                                <li><a class="group-tp" href="#" data-tippy-content="سعید "> <img
-                                      src="{% static 'assets/images/contact/2.jpg' %}" alt="group-icon-img" /></a>
-                                </li>
-                                <li><a class="group-tp" href="#" data-tippy-content="رویا"> <img
-                                      src="{% static 'assets/images/contact/3.jpg' %}" alt="group-icon-img" /></a></li>
-                                <li>+ 12</li>
-                              </ul>
-                              <div class="badge badge-primary"></div>
-                            </div>
-                          </div>
-                        </li>
-                        <li data-to="group_blank">
-                          <div class="group-box">
-                            <div class="profile bg-danger"><span>HT</span></div>
-                            <div class="details">
-                              <h5>فیلم و سریال</h5>
-                              <h6>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان
-                                گرافیک است. </h6>
-                            </div>
-                          </div>
-                        </li>
-                        <li data-to="group_blank">
-                          <div class="group-box">
-                            <div class="profile"><img class="bg-img" src="{% static 'assets/images/avtar/girls.jpg' %}" alt="Avatar" />
-                            </div>
-                            <div class="details">
-                              <h5>باشگاه پرسپولیس</h5>
-                              <h6>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان
-                                گرافیک است. </h6>
-                            </div>
-                          </div>
-                        </li>
-                        <li data-to="group_blank">
-                          <div class="group-box">
-                            <div class="profile bg-success"><span>CE</span></div>
-                            <div class="details">
-                              <h5>مهندسان فضایی</h5>
-                              <h6>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان
-                                گرافیک است. </h6>
-                            </div>
-                            <div class="date-status"></div>
-                          </div>
-                        </li>
-                      </ul>
+                      </a>
                     </div>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+
+              <div class="tab-pane fade {% if active_tab == 'profile' %}show active{% endif %}" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <div class="profile-panel">
+                  <div class="profile-preview">
+                    <img src="{{ user.get_avatar_url }}" alt="{{ user.get_full_name }}">
+                    <h4>{{ user.get_full_name }}</h4>
+                    <p>{{ user.username }}</p>
+                    {% if user.email %}<p>{{ user.email }}</p>{% endif %}
                   </div>
+                  <form class="profile-edit-form" method="POST" action="{% url 'account:profile' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <label>نام</label>
+                    <input class="form-control" type="text" name="first_name" value="{{ user.first_name|default_if_none:'' }}">
+                    <label>نام خانوادگی</label>
+                    <input class="form-control" type="text" name="last_name" value="{{ user.last_name|default_if_none:'' }}">
+                    <label>ایمیل</label>
+                    <input class="form-control" type="email" name="email" value="{{ user.email|default_if_none:'' }}">
+                    <label>تصویر پروفایل</label>
+                    <input class="form-control" type="file" name="image" accept="image/*">
+                    <label class="privacy-check"><input type="checkbox" name="username_public" {% if user.username_public %}checked{% endif %}> نمایش شماره</label>
+                    <label class="privacy-check"><input type="checkbox" name="email_public" {% if user.email_public %}checked{% endif %}> نمایش ایمیل</label>
+                    <label class="privacy-check"><input type="checkbox" name="image_public" {% if user.image_public %}checked{% endif %}> نمایش تصویر</label>
+                    <button class="nav-link" type="submit">ذخیره پروفایل</button>
+                  </form>
                 </div>
               </div>
-              
-            
             </div>
           </div>
         </div>
@@ -348,7 +304,7 @@
               <input id="pv-username" class="form-control" type="tel" placeholder="شماره تماس" aria-label="Recipient's username"
                 aria-describedby="basic-addon21" />
               
-              <a class="nav-link button-effect" onclick="javascript:start_pv()">شروع چت</a>
+              <a class="nav-link button-effect" href="#" onclick="start_pv(); return false;">شروع چت</a>
 
             </div>
           </div>
@@ -379,7 +335,7 @@
               <input hidden class="form-control" type="text" name="type" value="2" placeholder="بیو" aria-label="Recipient's username"
                 aria-describedby="basic-addon21" />
               
-              <input class="nav-link button-effect" value="ایجاد کانال" type="submit">
+              <input class="nav-link" value="ایجاد کانال" type="submit">
 
             </form>
           </div>
@@ -411,7 +367,7 @@
               <input hidden class="form-control" type="text" name="type" value="1" placeholder="بیو" aria-label="Recipient's username"
                 aria-describedby="basic-addon21" />
               
-              <input class="nav-link button-effect" value="ایجاد گروه" type="submit">
+              <input class="nav-link" value="ایجاد گروه" type="submit">
 
             </form>
           </div>
@@ -446,10 +402,12 @@
 
   <script>
     function start_pv(){
-      username = $('#pv-username')[0].value;
-
-      var url = new URL(window.location.href);
-      window.location.href = 'start-pv/' + username;
+      var username = ($('#pv-username').val() || '').trim();
+      if (!username) {
+        alert('شماره تماس را وارد کنید');
+        return;
+      }
+      window.location.href = '/start-pv/' + encodeURIComponent(username) + '/';
     }
   </script>
 </body>

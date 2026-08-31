@@ -10,10 +10,15 @@ GROUPE_TYPE = (
 
 class Group(models.Model):
     name = models.CharField(max_length=255)
-    desc = models.TextField()
+    desc = models.TextField(blank=True)
     image = models.ImageField(upload_to="group/images/",blank=True, null=True)
     type = models.CharField(max_length=2, choices=GROUPE_TYPE)
     owner = models.ForeignKey(account.UserProfile, on_delete=models.CASCADE)
+
+    def get_avatar_url(self):
+        if self.image:
+            return self.image.url
+        return '/static/assets/images/avtar/teq.jpg'
 
 
 class GroupMember(models.Model):
@@ -37,10 +42,35 @@ class GroupMessage(models.Model):
     is_deleted = models.BooleanField(default=False)
 
 
+class Contact(models.Model):
+    created = models.DateTimeField(default=timezone.now)
+    owner = models.ForeignKey(account.UserProfile, related_name='contacts', on_delete=models.CASCADE)
+    person = models.ForeignKey(account.UserProfile, related_name='saved_by', on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('owner', 'person')
+
+    def __str__(self):
+        return '{} -> {}'.format(self.owner.username, self.person.username)
+
+
+def add_contact(owner, person):
+    if not owner or not person or owner.id == person.id:
+        return None
+    contact, _ = Contact.objects.get_or_create(owner=owner, person=person)
+    return contact
+
+
 class PV(models.Model):
     created = models.DateTimeField(default = timezone.now)
     user1 = models.ForeignKey(account.UserProfile, related_name='user1s', on_delete=models.CASCADE)
     user2 = models.ForeignKey(account.UserProfile, related_name='user2s',on_delete=models.CASCADE)
+
+    def other_user(self, user):
+        return self.user2 if self.user1_id == user.id else self.user1
+
+    def last_visible_message(self):
+        return self.messages.filter(is_deleted=False).order_by('-created').first()
 
 
 class PVMessage(models.Model):

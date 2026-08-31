@@ -56,10 +56,16 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['first_name', 'last_name', 'email']
 
     def get_full_name(self):
-        return '{} {}'.format(self.first_name, self.last_name)
+        name = '{} {}'.format(self.first_name or '', self.last_name or '').strip()
+        return name or self.username
+
+    def get_avatar_url(self):
+        if self.image:
+            return self.image.url
+        return '/static/assets/images/contact/2.jpg'
 
     def __str__(self):
-        return '{} {}'.format(self.first_name, self.last_name)
+        return self.get_full_name()
     
     def is_member(self, group):
         group_member = apps.get_model(app_label='main', model_name='GroupMember').objects.filter(user=self, group=group, is_member=True)
@@ -67,8 +73,8 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
             return True
         return False
     
-    def can_send_message(user, group):
-        group_member = apps.get_model(app_label='main', model_name='GroupMember').objects.filter(user=user, group=group, is_member=True)
+    def can_send_message(self, group):
+        group_member = apps.get_model(app_label='main', model_name='GroupMember').objects.filter(user=self, group=group, is_member=True)
         if group_member:
             group_member = group_member[0]
             if group_member.group.type == '1' or group_member.is_admin:

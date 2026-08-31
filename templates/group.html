@@ -18,8 +18,8 @@
               <div class="col-7">
                 <div class="media left">
                   <div class="media-left mr-3">
-                    <div class="profile online menu-trigger"><img class="bg-img" src="{% static 'assets/images/contact/2.jpg' %}"
-                        alt="Avatar" /></div>
+                    <div class="profile online menu-trigger"><img class="bg-img" src="{{ group.get_avatar_url }}"
+                        alt="{{ group.name }}" /></div>
                   </div>
                   <div class="media-body">
                     <h5>{{group.name}}</h5>
@@ -46,35 +46,8 @@
               </div>
               <div class="col">
                 <ul class="calls text-right">
-                  <li><a class="icon-btn btn-light button-effect" href="#" data-tippy-content="تماس صوتی سریع"
-                      data-toggle="modal" data-target="#audiocall"><i data-feather="phone"></i></a></li>
-                  <li><a class="icon-btn btn-light button-effect" href="#" data-tippy-content="تماس تصویری سریع"
-                      data-toggle="modal" data-target="#videocall"><i data-feather="video"></i></a></li>
-                  <li><a class="icon-btn btn-light button-effect apps-toggle" href="#"
-                      data-tippy-content="تمام برنامه ها"><i class="ti-layout-grid2"></i></a></li>
-                  <li class="chat-friend-toggle"><a class="icon-btn btn-light bg-transparent button-effect outside"
-                      href="#" data-tippy-content="عملیات سریع"><i data-feather="more-vertical"></i></a>
-                    <div class="chat-frind-content">
-                      <ul>
-                        <li><a class="icon-btn btn-outline-primary button-effect btn-sm" href="#"><i
-                              data-feather="user"></i></a>
-                          <h5>پروفایل</h5>
-                        </li>
-                        <li><a class="icon-btn btn-outline-success button-effect btn-sm" href="#"><i
-                              data-feather="plus-circle"></i></a>
-                          <h5>بایگانی</h5>
-                        </li>
-                        <li><a class="icon-btn btn-outline-danger button-effect btn-sm" href="#"><i
-                              data-feather="trash-2"></i></a>
-                          <h5>حذف</h5>
-                        </li>
-                        <li><a class="icon-btn btn-outline-light button-effect btn-sm" href="#"><i
-                              data-feather="slash"></i></a>
-                          <h5>مسدود</h5>
-                        </li>
-                      </ul>
-                    </div>
-                  </li>
+                  <li><a class="icon-btn btn-light button-effect" href="/"
+                      data-tippy-content="بازگشت"><i data-feather="home"></i></a></li>
                 </ul>
               </div>
             </div>
@@ -177,12 +150,13 @@
    <script>
 
         const chatSocket = new WebSocket(
-            'ws://'
+            (window.location.protocol === 'https:' ? 'wss://' : 'ws://')
             + window.location.host
             + '/ws/group/'
             + {{group.id}}
             + '/'
         );
+        window.chatSocket = chatSocket;
 
         // onmessage - An event listener to be called when a message is received from the server.
         chatSocket.onmessage = function(e) {
@@ -194,13 +168,13 @@
                   sender = "replies";
 
                   if (data.user_id == {{user.id}}){
-                    sender = "send";
+                    sender = "sent";
                   }
                   if ($.trim(data.message) == "") {
                       return false;
                     }
 
-                    if (sender == "send"){
+                    if (sender == "sent"){
                     $(
                     `<li class="${sender}" id="${data.message_id}">
                     <div class="media">
@@ -270,20 +244,28 @@
 
         {% if is_member %}
             {% if can_send_message %}
-        document.querySelector('#message-btn').onclick = function(e) {
+        function sendChatMessage() {
             const messageInputDom = document.querySelector('#message-input');
-            const message = messageInputDom.value;
-            console.log(message);
-
-            // Send the msg object as a JSON-formatted string.
+            const message = (messageInputDom.value || '').trim();
+            if (!message || chatSocket.readyState !== WebSocket.OPEN) {
+                return;
+            }
             chatSocket.send(JSON.stringify({
                 'type': 'MESSAGE',
                 'message': message
             }));
-
-            // Blank the text input element, ready to receive the next line of text from the user.
             messageInputDom.value = '';
+        }
+        document.querySelector('#message-btn').onclick = function(e) {
+            e.preventDefault();
+            sendChatMessage();
         };
+        document.querySelector('#message-input').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendChatMessage();
+            }
+        });
             {% endif %}
 
         {% if user != group.owner %}

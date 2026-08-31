@@ -6,6 +6,8 @@ from main import models
 
 
 def group_view(request, group_id):
+    if not request.user.is_authenticated:
+        return redirect('account:account')
 
     group = models.Group.objects.filter(id=group_id)
 
